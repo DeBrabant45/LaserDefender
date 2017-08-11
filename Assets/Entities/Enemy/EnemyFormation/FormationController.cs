@@ -8,6 +8,7 @@ public class FormationController : MonoBehaviour
     public float width = 10f;
     public float height = 5f;
     public float speed = 1f;
+    public float spawnDelay = 0.5f;
 
     private bool movingRight = false;
     private float xMin;
@@ -21,12 +22,12 @@ public class FormationController : MonoBehaviour
         Vector3 rightBoundary = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distanceToCamera));
         xMax = rightBoundary.x;
         xMin = leftBoundary.x;
-
-        enemyRespawn();
+        enemySpawnUntilFull();
+        //enemySpawn();
     }
 
     // What Respawns the enemy after count hit 0
-    void enemyRespawn()
+    void enemySpawn()
     {
         foreach (Transform child in transform)
         {
@@ -34,6 +35,22 @@ public class FormationController : MonoBehaviour
             enemy.transform.parent = child;
         }
     }
+
+    // Spawing only one enemy at a time
+    void enemySpawnUntilFull ()
+    {
+        Transform freePosition = NextFreePosition();
+        if (freePosition)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, freePosition.position, Quaternion.identity) as GameObject;
+            enemy.transform.parent = freePosition;
+        }
+        if (NextFreePosition())
+        {
+            Invoke("enemySpawnUntilFull", spawnDelay);
+        }
+    }
+
 
     // Enemy Movement
     void enemyMovement()
@@ -59,6 +76,7 @@ public class FormationController : MonoBehaviour
         }
     }
 
+
     public void OnDrawGizmos ()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(width, height, 0));
@@ -70,8 +88,21 @@ public class FormationController : MonoBehaviour
         enemyMovement();
         if(AllMemebersDead())
         {
-            enemyRespawn();
+            enemySpawnUntilFull();
         }
+    }
+
+
+    Transform NextFreePosition ()
+    {
+        foreach (Transform childPositionGameObject in transform)
+        {
+            if (childPositionGameObject.childCount == 0)
+            {
+                return childPositionGameObject;
+            }
+        }
+        return null;
     }
 
     // Checking Enemy count

@@ -7,7 +7,15 @@ public class EnemyFormation : MonoBehaviour
     public float health = 200;
     public GameObject projectile;
     public float projectileSpeed;
-    private float fireRate = 0.5f;
+    public int scoreValue = 150;
+    private float fireRate = 0.2f;
+    private ScoreKeeper scoreKeeper;
+
+
+    void Start ()
+    {
+        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+    }
 	
     
     void enemyFire()
@@ -29,6 +37,7 @@ public class EnemyFormation : MonoBehaviour
             if (health <= 0)
             {
                 Destroy(gameObject);
+                scoreKeeper.Score(scoreValue);
             }
             Debug.Log("Hit by missle");
         }
