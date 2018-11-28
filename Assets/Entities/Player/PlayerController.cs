@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public float projectileSpeed;
     public float fireRate = 0.2f;
 
+    public AudioClip fireSound;
+    public AudioClip deathSound;
+
     private float health = 300;
     private float padding = 1.0f;
     private float xMin;
@@ -31,6 +34,7 @@ public class PlayerController : MonoBehaviour
         Vector3 offSet = transform.position + new Vector3(0, 1, 0);
         GameObject beam = Instantiate(projectile, offSet, Quaternion.identity) as GameObject;
         beam.GetComponent<Rigidbody2D>().velocity = new Vector3(0f, projectileSpeed, 0);
+        AudioSource.PlayClipAtPoint(fireSound, transform.position);
 
     }
 
@@ -38,7 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            InvokeRepeating("Fire", 0.00001f, fireRate);
+            InvokeRepeating("Fire", 0.00001f, fireRate / 0.5f);
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -70,10 +74,18 @@ public class PlayerController : MonoBehaviour
             missile.Hit();
             if (health <= 0)
             {
-                Destroy(gameObject);
+                Die();
             }
             Debug.Log("Hit by missle");
         }
+    }
+
+    void Die()
+    {
+        LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        man.LoadLevel("Win Screen");
+        AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
