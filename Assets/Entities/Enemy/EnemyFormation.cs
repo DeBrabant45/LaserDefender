@@ -42,7 +42,6 @@ public class EnemyFormation : MonoBehaviour
             {
                 Die();           
             }
-            Debug.Log("Hit by missle");
         }
     }
 

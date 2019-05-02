@@ -40,18 +40,17 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMoveSet()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            InvokeRepeating("Fire", 0.00001f, fireRate / 0.5f);
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            CancelInvoke("Fire");
-        }
-
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.position += Vector3.down * speed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.position += Vector3.up * speed * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -61,7 +60,18 @@ public class PlayerController : MonoBehaviour
         // Restrict the player to the game space
         float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
         transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+    }
 
+    void PlayerShooting()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InvokeRepeating("Fire", 0.00001f, fireRate / 0.5f);
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            CancelInvoke("Fire");
+        }
     }
 
     // Player taking damage from enemy
@@ -92,6 +102,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         PlayerMoveSet();
+        PlayerShooting();
     }
 
 }

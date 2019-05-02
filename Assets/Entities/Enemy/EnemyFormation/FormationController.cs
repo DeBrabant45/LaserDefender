@@ -23,7 +23,6 @@ public class FormationController : MonoBehaviour
         xMax = rightBoundary.x;
         xMin = leftBoundary.x;
         enemySpawnUntilFull();
-        //enemySpawn();
     }
 
     // What Respawns the enemy after count hit 0
@@ -74,6 +73,8 @@ public class FormationController : MonoBehaviour
         {
             movingRight = false;
         }
+        //Setting the formation to fall to the earth
+        transform.position += Vector3.down * speed * Time.deltaTime / 15;
     }
 
 
