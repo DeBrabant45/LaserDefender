@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 15.0f;
-    public GameObject projectile;
     public float projectileSpeed;
     public float fireRate = 0.2f;
+    public GameObject projectile;
+    public GameObject DeathParticls;
+    public GameObject ships1, ships2, ships3;
+
 
     public AudioClip fireSound;
     public AudioClip deathSound;
@@ -86,16 +89,45 @@ public class PlayerController : MonoBehaviour
             {
                 Die();
             }
-            Debug.Log("Hit by missle");
+        }
+    }
+
+    void HealthBar()
+    {
+        if (health >= 300)
+            health = 300;
+        switch(health)
+        {
+            case 300:
+                ships1.gameObject.SetActive(true);
+                ships2.gameObject.SetActive(true);
+                ships3.gameObject.SetActive(true);
+                break;
+            case 200:
+                ships1.gameObject.SetActive(true);
+                ships2.gameObject.SetActive(true);
+                ships3.gameObject.SetActive(false);
+                break;
+            case 100:
+                ships1.gameObject.SetActive(true);
+                ships2.gameObject.SetActive(false);
+                ships3.gameObject.SetActive(false);
+                break;
+            case 0:
+                ships1.gameObject.SetActive(false);
+                ships2.gameObject.SetActive(false);
+                ships3.gameObject.SetActive(false);
+                break;
         }
     }
 
     void Die()
     {
+        Destroy(gameObject);
+        GameObject deathParticle = Instantiate(DeathParticls, transform.position, Quaternion.identity) as GameObject;
         LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         man.LoadLevel("Win Screen");
         AudioSource.PlayClipAtPoint(deathSound, transform.position);
-        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -103,6 +135,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMoveSet();
         PlayerShooting();
+        HealthBar();
     }
 
 }

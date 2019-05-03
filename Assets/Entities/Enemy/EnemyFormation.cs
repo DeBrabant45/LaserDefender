@@ -6,6 +6,7 @@ public class EnemyFormation : MonoBehaviour
 {
     public float health = 200;
     public GameObject projectile;
+    public GameObject DeathParticls;
     public float projectileSpeed;
     public int scoreValue = 150;
     private float fireRate = 0.2f;
@@ -40,15 +41,18 @@ public class EnemyFormation : MonoBehaviour
             missile.Hit();
             if (health <= 0)
             {
-                Die();           
+                Die();
             }
         }
     }
 
     void Die()
     {
+        float delayTimer = 8f;
         AudioSource.PlayClipAtPoint(deathSound, transform.position);
         Destroy(gameObject);
+        GameObject deathParticle = Instantiate(DeathParticls, transform.position, Quaternion.identity) as GameObject;
+        Destroy(deathParticle, delayTimer);
         scoreKeeper.Score(scoreValue);
     }
 
