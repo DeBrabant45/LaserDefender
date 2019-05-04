@@ -13,9 +13,11 @@ public class FormationController : MonoBehaviour
     private bool movingRight = false;
     private float xMin;
     private float xMax;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         float distanceToCamera = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftBoundary = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distanceToCamera));
@@ -23,6 +25,8 @@ public class FormationController : MonoBehaviour
         xMax = rightBoundary.x;
         xMin = leftBoundary.x;
         enemySpawnUntilFull();
+        startPosition = transform.position;
+        startRotation = transform.rotation;
     }
 
     // What Respawns the enemy after count hit 0
@@ -116,6 +120,8 @@ public class FormationController : MonoBehaviour
                 return false;
             }
         }
+        transform.position = startPosition;
+        transform.rotation = startRotation;
         return true;
     }
 }
