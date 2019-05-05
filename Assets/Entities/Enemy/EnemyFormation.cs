@@ -9,8 +9,10 @@ public class EnemyFormation : MonoBehaviour
     public GameObject DeathParticls;
     public float projectileSpeed;
     public int scoreValue = 150;
+
     private float fireRate = 0.2f;
     private ScoreKeeper scoreKeeper;
+    private PlayerController player;
 
     public AudioClip fireSound;
     public AudioClip deathSound;
@@ -35,6 +37,7 @@ public class EnemyFormation : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider)
     {
         Projectile missile = collider.gameObject.GetComponent<Projectile>();
+        Asteroids asteroids = collider.gameObject.GetComponent<Asteroids>();
         if (missile)
         {
             health -= missile.GetDamage();
@@ -43,6 +46,11 @@ public class EnemyFormation : MonoBehaviour
             {
                 Die();
             }
+        }
+        if (asteroids)
+        {
+            health -= asteroids.damage;
+            asteroids.Die();
         }
     }
 
@@ -56,7 +64,7 @@ public class EnemyFormation : MonoBehaviour
         scoreKeeper.Score(scoreValue);
     }
 
-    void Update ()
+    void FixedUpdate ()
     {
         // Setting a Random enemy shot
         float probability = Time.deltaTime * fireRate;

@@ -11,14 +11,12 @@ public class PlayerController : MonoBehaviour
     public GameObject DeathParticls;
     public GameObject ships1, ships2, ships3;
 
-
     public AudioClip fireSound;
     public AudioClip deathSound;
 
-    private float health = 300;
+    public float health = 300;
     private float padding = 1.0f;
-    private float xMin;
-    private float xMax;
+    private float xMin, xMax, yMin, yMax;
 
     // Use this for initialization
     void Start()
@@ -26,9 +24,12 @@ public class PlayerController : MonoBehaviour
         float distance = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
         Vector3 rightmost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
+        Vector3 topmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
+        Vector3 downmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, distance));
         xMin = leftmost.x + padding;
         xMax = rightmost.x - padding;
-
+        yMin = topmost.y + padding;
+        yMax = downmost.y - padding;
     }
 
     void Fire()
@@ -62,7 +63,8 @@ public class PlayerController : MonoBehaviour
 
         // Restrict the player to the game space
         float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+        float newY = Mathf.Clamp(transform.position.y, yMin, yMax);
+        transform.position = new Vector3(newX, newY, transform.position.z);
     }
 
     void PlayerShooting()
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider)
     {
         Projectile missile = collider.gameObject.GetComponent<Projectile>();
+        Asteroids asteroids = collider.gameObject.GetComponent<Asteroids>();
         if (missile)
         {
             health -= missile.GetDamage();
@@ -89,6 +92,11 @@ public class PlayerController : MonoBehaviour
             {
                 Die();
             }
+        }
+        if(asteroids)
+        {
+            health -= asteroids.damage;
+            asteroids.Die();
         }
     }
 
@@ -126,12 +134,12 @@ public class PlayerController : MonoBehaviour
         Destroy(gameObject);
         GameObject deathParticle = Instantiate(DeathParticls, transform.position, Quaternion.identity) as GameObject;
         LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        man.LoadLevel("Win Screen");
+        man.LoadLevel("Lose Screen");
         AudioSource.PlayClipAtPoint(deathSound, transform.position);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         PlayerMoveSet();
         PlayerShooting();
