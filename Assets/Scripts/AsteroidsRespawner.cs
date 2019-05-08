@@ -5,9 +5,8 @@ using UnityEngine;
 public class AsteroidsRespawner : MonoBehaviour
 {
     public GameObject asteroidsPrefab;
-    public PlayerController player;
     public float spawnDelay = 50f;
-    public float spawnTime = 50f;
+    public float spawnTime = 15f;
     public Transform[] spawnPoints;  // An array of the spawn points this enemy can spawn from.
 
     private bool stopSpawning = false;

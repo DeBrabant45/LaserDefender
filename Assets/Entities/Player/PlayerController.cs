@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 15.0f;
+    public float speed = 5.0f;
     public float projectileSpeed;
     public float fireRate = 0.2f;
     public GameObject projectile;
     public GameObject DeathParticls;
-    public GameObject ships1, ships2, ships3;
+    public GameObject[] ships = new GameObject[3];
 
     public AudioClip fireSound;
     public AudioClip deathSound;
+    Vector2 movement = new Vector2();
+    Rigidbody2D rb2D;
 
     public float health = 300;
     private float padding = 1.0f;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        rb2D = GetComponent<Rigidbody2D>();
         float distance = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
         Vector3 rightmost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
@@ -44,22 +47,9 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMoveSet()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.position += Vector3.down * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.position += Vector3.up * speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.position += new Vector3(+speed * Time.deltaTime, 0, 0);
-        }
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+        rb2D.velocity = movement * speed / 2;
 
         // Restrict the player to the game space
         float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
@@ -69,11 +59,11 @@ public class PlayerController : MonoBehaviour
 
     void PlayerShooting()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Fire1"))
         {
             InvokeRepeating("Fire", 0.00001f, fireRate / 0.5f);
         }
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetButtonUp("Fire1"))
         {
             CancelInvoke("Fire");
         }
@@ -88,44 +78,40 @@ public class PlayerController : MonoBehaviour
         {
             health -= missile.GetDamage();
             missile.Hit();
-            if (health <= 0)
-            {
-                Die();
-            }
         }
         if(asteroids)
         {
             health -= asteroids.damage;
             asteroids.Die();
         }
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     void HealthBar()
     {
-        if (health >= 300)
-            health = 300;
-        switch(health)
+        for(int i = 0; i < ships.Length; i++)
         {
-            case 300:
-                ships1.gameObject.SetActive(true);
-                ships2.gameObject.SetActive(true);
-                ships3.gameObject.SetActive(true);
-                break;
-            case 200:
-                ships1.gameObject.SetActive(true);
-                ships2.gameObject.SetActive(true);
-                ships3.gameObject.SetActive(false);
-                break;
-            case 100:
-                ships1.gameObject.SetActive(true);
-                ships2.gameObject.SetActive(false);
-                ships3.gameObject.SetActive(false);
-                break;
-            case 0:
-                ships1.gameObject.SetActive(false);
-                ships2.gameObject.SetActive(false);
-                ships3.gameObject.SetActive(false);
-                break;
+            if(health >= 300)
+                health = 300;
+            switch(health)
+            {
+                case 300:
+                    ships[i].gameObject.SetActive(true);
+                    break;
+                case 200:
+                    ships[2].gameObject.SetActive(false);
+                    break;
+                case 100:
+                    ships[1].gameObject.SetActive(false);
+                    ships[2].gameObject.SetActive(false);
+                    break;
+                case 0:
+                    ships[i].gameObject.SetActive(false);
+                    break;
+            }
         }
     }
 
