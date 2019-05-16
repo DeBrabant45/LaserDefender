@@ -29,24 +29,27 @@ public class MusicPlayer : MonoBehaviour {
 		
 	}
 
-    void OnLevelWasLoaded (int level)
+    void OnLevelWasLoaded(int level)
     {
-        Debug.Log("MusicPLayer: loaded level " + level);
-        music.Stop();
+        //Debug.Log("MusicPLayer: loaded level " + level);
+        if (music != null)
+        {
+            music.Stop();
 
-        if(level == 0)
-        {
-            music.clip = startClip;
+            if (level == 0)
+            {
+                music.clip = startClip;
+            }
+            if (level == 1)
+            {
+                music.clip = gameClip;
+            }
+            if (level == 2)
+            {
+                music.clip = endClip;
+            }
+            music.loop = true;
+            music.Play();
         }
-        if (level == 1)
-        {
-            music.clip = gameClip;
-        }
-        if (level == 2)
-        {
-            music.clip = endClip;
-        }
-        music.loop = true;
-        music.Play();
     }
 }

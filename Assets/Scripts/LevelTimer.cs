@@ -32,7 +32,7 @@ public class LevelTimer : MonoBehaviour
         if (levelTimer <= 0)
         {
             LevelManager manager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-            manager.LoadLevel("Win Screen");
+            manager.LoadNextLevel();
         }
     }
 

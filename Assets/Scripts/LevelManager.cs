@@ -4,13 +4,10 @@ using System.Collections;
 
 public class LevelManager : MonoBehaviour
 {
-    //public Animator animator;
-
-	public void LoadLevel(string name)
+	public void LoadLevel(int levelIndex)
     {
 		Debug.Log ("New Level load: " + name);
-        //animator.SetTrigger("FadeOut");
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(levelIndex);
 	}
 
 	public void QuitRequest()
@@ -18,4 +15,9 @@ public class LevelManager : MonoBehaviour
 		Debug.Log ("Quit requested");
 		Application.Quit ();
 	}
+
+    public void LoadNextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 }

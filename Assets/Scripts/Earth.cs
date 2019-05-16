@@ -10,7 +10,7 @@ public class Earth : MonoBehaviour
         if (enemy)
         {
             LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-            man.LoadLevel("Lose Screen");
+            man.LoadLevel(5);
         }
     }
 }

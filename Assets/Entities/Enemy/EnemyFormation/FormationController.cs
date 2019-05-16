@@ -54,7 +54,6 @@ public class FormationController : MonoBehaviour
         }
     }
 
-
     // Enemy Movement
     void enemyMovement()
     {
@@ -81,7 +80,6 @@ public class FormationController : MonoBehaviour
         transform.position += Vector3.down * speed * Time.deltaTime / 15;
     }
 
-
     public void OnDrawGizmos ()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(width, height, 0));
@@ -97,7 +95,6 @@ public class FormationController : MonoBehaviour
         }
     }
 
-
     Transform NextFreePosition ()
     {
         foreach (Transform childPositionGameObject in transform)
@@ -111,7 +108,7 @@ public class FormationController : MonoBehaviour
     }
 
     // Checking Enemy count
-    bool AllMemebersDead()
+    public bool AllMemebersDead()
     {
         foreach (Transform childPositionGameObject in transform)
         {
