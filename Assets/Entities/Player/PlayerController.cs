@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         Destroy(gameObject);
         GameObject deathParticle = Instantiate(DeathParticls, transform.position, Quaternion.identity) as GameObject;
         LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        man.LoadLevel(5);
+        man.LoadLevel(6);
         AudioSource.PlayClipAtPoint(deathSound, transform.position);
     }
 
