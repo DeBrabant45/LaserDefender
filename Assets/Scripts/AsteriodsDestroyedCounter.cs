@@ -13,10 +13,9 @@ public class AsteriodsDestroyedCounter : MonoBehaviour
     {
         asteriodKillCount = 0;
         aCount = GetComponent<Text>();
-        InvokeRepeating("SetAsteriodKillCountUI", 0, 30);
     }
 
-    private void SetAsteriodKillCountUI()
+    private void Update()
     {
         aCount.text = asteriodKillCount.ToString();
     }

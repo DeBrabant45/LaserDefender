@@ -13,10 +13,9 @@ public class ShipsDestroyedCounter : MonoBehaviour
     {
         shipsKillCount = 0;
         sCount = GetComponent<Text>();
-        InvokeRepeating("SetShipKillCountUI", 0, 30);
     }
 
-    private void SetShipKillCountUI()
+    private void Update()
     {
         sCount.text = shipsKillCount.ToString();
     }
