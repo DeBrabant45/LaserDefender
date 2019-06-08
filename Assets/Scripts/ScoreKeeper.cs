@@ -6,20 +6,23 @@ using UnityEngine.UI;
 public class ScoreKeeper : MonoBehaviour
 {
     public static int playerScore = 0;
-    private Text myText;
+    const string TOTALSCOREKEY = "Total";
+    private Text scoreText;
 
     void Start ()
     {
-       myText = GetComponent<Text>();
-        Reset();
+        scoreText = GetComponent<Text>();
+        //playerScore = PlayerPrefs.GetInt(TOTALSCOREKEY);
+        //Reset();
     }
 	
 	public void Score (int points)
     {
         playerScore += points;
-        myText.text = playerScore.ToString();
-	}
-	
+        scoreText.text = playerScore.ToString();
+        //PlayerPrefs.SetInt(TOTALSCOREKEY, playerScore);
+    }
+
     public static void Reset ()
     {
         playerScore = 0;

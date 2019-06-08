@@ -41,6 +41,8 @@ public class Asteroids : MonoBehaviour
         GameObject dustParticals = Instantiate(DustParticals, transform.position, Quaternion.identity) as GameObject;
         Destroy(dustParticals, delayTimer);
         scoreKeeper.Score(scoreValue);
+        // Every time a asteriod is destoryed add a count to the post Level counter
+        AsteriodsDestroyedCounter.asteriodKillCount++;
     }
 
     // Update is called once per frame

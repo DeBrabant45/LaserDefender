@@ -19,21 +19,12 @@ public class LevelTimer : MonoBehaviour
     {
         levelTimer -= Time.deltaTime;
         timerText.text = levelTimer.ToString("f0");
-        TimeToNextLevel();
+        //TimeToNextLevel();
     }
 
     public static void Reset()
     {
         levelTimer = 30;
-    }
-
-    public void TimeToNextLevel()
-    {
-        if (levelTimer <= 0)
-        {
-            LevelManager manager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-            manager.LoadNextLevel();
-        }
     }
 
     private void Update()

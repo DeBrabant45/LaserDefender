@@ -62,6 +62,8 @@ public class EnemyFormation : MonoBehaviour
         GameObject deathParticle = Instantiate(DeathParticls, transform.position, Quaternion.identity) as GameObject;
         Destroy(deathParticle, delayTimer);
         scoreKeeper.Score(scoreValue);
+        // Every time a ship is destoryed add a count to the post Level counter
+        ShipsDestroyedCounter.shipsKillCount++;
     }
 
     void FixedUpdate ()

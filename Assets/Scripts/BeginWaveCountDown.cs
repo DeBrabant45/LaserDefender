@@ -12,22 +12,25 @@ public class BeginWaveCountDown : MonoBehaviour
     void Start()
     {
         timerText = GetComponent<Text>();
-        StartCoroutine("PauseForSeconds");
         Reset();
+        StartCoroutine("StartDelay");
     }
 
-    private IEnumerator PauseForSeconds()
+    private IEnumerator StartDelay()
     {
-        float originalTimeScale = Time.timeScale; // store original time scale in case it was not 1
+        float originalTimeScale = 1; // store original time scale in case it was not 1
         Time.timeScale = 0; // pause
         while (beginWaveTimer >= 0f)
         {
-            yield return null; // don't use WaitForSeconds() if Time.timeScale is 0!
-            beginWaveTimer -= Time.unscaledDeltaTime; // returns deltaTime without being multiplied by Time.timeScale
-            timerText.text = beginWaveTimer.ToString("f0");
+            yield return null; // don't use StartDelay() if beginWaveTimer is 0!
+            beginWaveTimer -= Time.unscaledDeltaTime; // take away from the begintimer
+            timerText.text = beginWaveTimer.ToString("f0"); 
         }
-        timerText.gameObject.SetActive(false);
-        Time.timeScale = originalTimeScale; // restore time scale from before pause
+        if(beginWaveTimer <= 0)
+        {
+            Time.timeScale = originalTimeScale; // restore time scale from before pause
+            timerText.gameObject.SetActive(false); 
+        }
     }
 
     public void Reset()
